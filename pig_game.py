@@ -3,7 +3,6 @@ import random
 # Need option to play again
 # Not much error handling for incorrect inputs throughout (i.e. roll again for HumanPlayer)
 # Game could randomize assignment of starting player
-# Work on logic of breaking while loop when player wins (still let's computer roll)
 
 
 def roll_dice():
@@ -30,6 +29,7 @@ class ComputerPlayer:
     def announce_win(self, computer_score):
         if computer_score >= 100:
             print(f"You lose.")
+            return True
 
 class HumanPlayer:
     """
@@ -72,16 +72,20 @@ class PigGame:
         player_score = 0
         computer_score = 0
 
-        print(f"Welcome to the game of Pig. It's you versus the computer.")
+        print(f"Welcome to the game of Pig. It's you versus the computer. Your roll starts automatically.")
 
-        while player_score < 100 and computer_score < 100: 
-        
-            if not self.player.announce_win(player_score):
+        while player_score < 100 and computer_score < 100:
+            if computer_score >= 100:
+                break
+            else:
                 player_score += HumanPlayer.roll_die(self)
                 print(f"Your total score is {player_score}.\n")
-            if not self.computer.announce_win(computer_score):
+            if player_score >= 100:
+                break
+            else:
                 computer_score += ComputerPlayer.roll_die(self)
                 print(f"The computer's total score is {computer_score}.\n")
+
         if player_score > computer_score:
             self.player.announce_win(player_score)
         else:
